@@ -1,0 +1,13 @@
+# Ignore system files
+*.log
+*.tmp
+
+# Ignore VS Code settings
+.vscode/
+
+# Ignore sensitive files
+config.py
+venv/
+__pycache__/
+*.pyc
+
