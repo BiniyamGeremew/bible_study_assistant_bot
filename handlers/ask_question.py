@@ -12,7 +12,7 @@ client = OpenAI(
 # Simple in-memory context storage
 user_contexts = {}
 
-# ---------------- STEP 1: Classify if the question is Bible-related ----------------
+# ---------------- Classify if the question is Bible-related ----------------
 def is_bible_related(question: str) -> bool:
     """
     Uses a small AI call to classify whether a question is Bible-related.
@@ -45,13 +45,13 @@ def is_bible_related(question: str) -> bool:
         return "YES" in decision.upper()
 
     except Exception as e:
-        print(f"⚠️ Classification error: {e}")
+        print(f"Classification error: {e}")
         return True  # fallback to True if uncertain
 
 # ---------------- STEP 2: Ask Question Handlers ----------------
 async def ask_question_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "Please type your Bible-related question in English. I will answer using AI."
+        "Please type your Bible-related question in English."
     )
 
 async def ask_question_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -66,7 +66,7 @@ async def ask_question_handler(update: Update, context: ContextTypes.DEFAULT_TYP
         )
         return
 
-    await update.message.reply_text("🤔 Thinking...")
+    await update.message.reply_text("Thinking...")
 
     # Retrieve or initialize user context
     history = user_contexts.get(user_id, [])
@@ -89,7 +89,7 @@ async def ask_question_handler(update: Update, context: ContextTypes.DEFAULT_TYP
             model="openai/gpt-4o",
             messages=messages,
             temperature=0.7,
-            max_tokens=600  # can increase safely now
+            max_tokens=600  # can increase (response content length)
         )
 
         # ---------------- Robust content extraction ----------------
@@ -103,7 +103,7 @@ async def ask_question_handler(update: Update, context: ContextTypes.DEFAULT_TYP
                 ai_answer = msg.content
 
         if not ai_answer.strip():
-            ai_answer = "⚠️ AI response was empty."
+            ai_answer = "AI response was empty."
 
         # ---------------- Split long messages for Telegram ----------------
         MAX_TELEGRAM_LEN = 4000  # Telegram limit per message
@@ -116,7 +116,7 @@ async def ask_question_handler(update: Update, context: ContextTypes.DEFAULT_TYP
         user_contexts[user_id] = history[-6:]
 
     except Exception as e:
-        await update.message.reply_text(f"❌ Error fetching response: {e}")
+        await update.message.reply_text(f"Error fetching response: {e}")
 
 async def ask_question_callback(update, context):
     query = update.callback_query

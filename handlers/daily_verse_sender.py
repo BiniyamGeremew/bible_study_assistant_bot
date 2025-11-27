@@ -23,7 +23,7 @@ def get_random_verse():
 
 # ------------------ Send Daily Verse ------------------
 async def send_daily_verse(context):
-    """Send daily verse to all users (plain text, with bot username)."""
+    #Send daily verse to all users (plain text, with bot username)
     if not os.path.exists(DATA_FILE):
         return
 
