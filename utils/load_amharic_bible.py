@@ -2,7 +2,7 @@ import os
 import json
 
 def load_amharic_bible():
-    AMH_BIBLE_PATH = "amharic_bible"  # folder with JSON books
+    AMH_BIBLE_PATH = "amharic_bible" 
     bible_books = {}
 
     # Load all JSON books dynamically
@@ -15,5 +15,5 @@ def load_amharic_bible():
                 book_name = "_".join(file_name.split("_")[1:]).replace(".json", "").strip()
                 bible_books[book_name] = data["chapters"]
 
-    print(f"✅ Loaded {len(bible_books)} Amharic books.")
+    print(f"Loaded {len(bible_books)} Amharic books.")
     return bible_books

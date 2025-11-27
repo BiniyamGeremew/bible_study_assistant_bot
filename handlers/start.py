@@ -14,7 +14,6 @@ DATA_FILE = "data/users.json"
 
 
 def save_user(chat_id):
-    """Save user ID for daily verse sending."""
     os.makedirs("data", exist_ok=True)
 
     users = []
@@ -27,14 +26,11 @@ def save_user(chat_id):
         with open(DATA_FILE, "w", encoding="utf-8") as f:
             json.dump(users, f, ensure_ascii=False, indent=2)
 
-
 def escape_markdown_v2(text: str) -> str:
-    """Escape MarkdownV2 special characters."""
+    #Escape MarkdownV2 special characters
     return re.sub(r'([_*\[\]()~`>#+\-=|{}.!])', r'\\\1', text)
 
-
 def sanitize_username(name: str) -> str:
-    """Sanitize username safely."""
     if not name:
         return "God’s Child"
     
@@ -45,7 +41,7 @@ def sanitize_username(name: str) -> str:
 
 
 def get_daily_verse():
-    """Select a random Amharic Bible verse."""
+    #Select a random Amharic Bible verse
     book_name = random.choice(list(bible_books_amharic.keys()))
     chapters = bible_books_amharic[book_name]
     chapter = random.choice(chapters)
@@ -55,7 +51,7 @@ def get_daily_verse():
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Send welcome message with a random verse."""
+   #Send welcome message with a random verse
     user = update.effective_user
 
     save_user(update.effective_chat.id)
@@ -75,7 +71,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     keyboard = [
         ["📖 Read Bible", "❓ Ask a Question"],
-        ["🗓 Daily Verse / Notification", "ℹ️ About / Help"]
     ]
 
     reply_markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)

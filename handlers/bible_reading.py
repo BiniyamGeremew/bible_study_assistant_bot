@@ -48,10 +48,9 @@ def escape_markdown_v2(text: str) -> str:
 
 # ---------------- Text Formatting Helper ----------------
 def format_bible_message(book_name: str, chapter: int, verses: list, language: str = "en") -> str:
-    """
-    Format a Bible passage (multiple verses) with MarkdownV2 blockquote style.
-    Works for both English and Amharic versions.
-    """
+ 
+    #Format a Bible passage (multiple verses) with MarkdownV2 blockquote style.
+  
     title = "📖 Chapter Reading:" if language == "en" else "📖 የዚህ ምዕራፍ ንባብ፦"
     title_md = escape_markdown_v2(title)
 
@@ -133,7 +132,6 @@ async def callback_dispatcher(update: Update, context: ContextTypes.DEFAULT_TYPE
         await show_verses(query, context, version, book, chapter)
         return
 
-
 # ---------------- Helper Functions ----------------
 async def show_version_menu(query, context):
     keyboard = [
@@ -146,7 +144,6 @@ async def show_version_menu(query, context):
         "Choose Bible version:",
         reply_markup=InlineKeyboardMarkup(keyboard)
     )
-
 
 async def show_books_menu(query, context, version):
     keyboard = []
@@ -167,7 +164,6 @@ async def show_books_menu(query, context, version):
         "Select a book:",
         reply_markup=InlineKeyboardMarkup(keyboard)
     )
-
 
 async def show_chapters_menu(query, context, version, book_name, page=0):
     if version == "english":
@@ -223,9 +219,9 @@ async def show_verses(query, context, version, book, chapter):
                     message = format_bible_message(book, chapter, chunk, language="en")
                     await query.message.reply_text(message, parse_mode="MarkdownV2")
             else:
-                await query.message.reply_text("❌ Could not fetch chapter.")
+                await query.message.reply_text("Could not fetch chapter.")
         except Exception:
-            await query.message.reply_text("❌ API error.")
+            await query.message.reply_text("API error.")
     else:
         chapters_list = bible_books_amharic[book]
         chapter_obj = next((c for c in chapters_list if int(c["chapter"]) == chapter), None)
@@ -236,7 +232,7 @@ async def show_verses(query, context, version, book, chapter):
                 message = format_bible_message(book, chapter, chunk, language="am")
                 await query.message.reply_text(message, parse_mode="MarkdownV2")
         else:
-            await query.message.reply_text("❌ Could not find chapter.")
+            await query.message.reply_text("Could not find chapter.")
 
     page = context.user_data.get("chapter_page", 0)
     keyboard = [[InlineKeyboardButton("⬅️ Back", callback_data=f"back_chapter_{page}")]]
