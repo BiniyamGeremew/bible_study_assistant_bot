@@ -38,6 +38,10 @@ python-telegram-bot==20.3
 requests==2.31.0  
 python-dotenv==1.0.1  
 openai>=1.42.0
+Flask
+gunicorn
+telebot
+rapidfuzz
 
 ## Usage
 Open Telegram, start a chat with your bot, use the menu to read Bible chapters in English or Amharic, ask Bible-related questions, and receive daily verses automatically.
