@@ -1,7 +1,8 @@
-python-telegram-bot==20.3
+python-telegram-bot[job-queue]
 requests==2.31.0
 python-dotenv==1.0.1
 openai>=1.42.0
+
 
 Flask
 gunicorn
