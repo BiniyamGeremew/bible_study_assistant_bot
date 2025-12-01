@@ -5,4 +5,5 @@ openai>=1.42.0
 
 Flask
 gunicorn
+telebot
 
