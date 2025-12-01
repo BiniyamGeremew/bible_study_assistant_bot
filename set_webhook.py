@@ -1,6 +1,5 @@
 import os
 import requests
-from config import BOT_TOKEN
 
 TOKEN = os.getenv("BOT_TOKEN")
 WEBHOOK_URL = "https://bible-study-assistant-bot.onrender.com/webhook"
