@@ -1,4 +1,4 @@
-from datetime import time, timedelta
+from datetime import time
 from telegram.ext import (
     Application,
     CommandHandler,
@@ -17,26 +17,30 @@ from handlers.ask_question import (
 from handlers.daily_verse_sender import send_daily_verse
 import asyncio
 
+# ------------------ Init App ------------------
 app = Application.builder().token(BOT_TOKEN).build()
 
-# ------------------ Register Handlers ------------------
+# ------------------ Message Handlers ------------------
 app.add_handler(CommandHandler("start", start))
 app.add_handler(MessageHandler(filters.Regex("^📖 Read Bible$"), read_bible_handler))
 app.add_handler(MessageHandler(filters.Regex("^❓ Ask a Question$"), ask_question_start))
 app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), ask_question_handler))
-app.add_handler(CallbackQueryHandler(callback_dispatcher))
-app.add_handler(CallbackQueryHandler(ask_question_callback))
+
+# ------------------ Callback Handlers ------------------
+app.add_handler(CallbackQueryHandler(callback_dispatcher,
+                                     pattern="^(version_|book_|chapter_|back_).*"))
+app.add_handler(CallbackQueryHandler(ask_question_callback,
+                                     pattern="^ask_.*"))
 
 # ------------------ Job Queue ------------------
 job_queue = app.job_queue
 
-# send daily verse at 12:00 AM Ethiopia time (UTC+3)
+# 12:00 AM Ethiopia time = 21:00 UTC
 job_queue.run_daily(
     send_daily_verse,
-    time=time(hour=21, minute=0, second=0),  
+    time=time(hour=21, minute=0, second=0),
     name="daily_verse"
 )
-
 
 print("✅ Bible Study Assistant Bot is running...")
 app.run_polling()
