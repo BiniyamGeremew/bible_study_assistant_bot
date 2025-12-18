@@ -15,30 +15,22 @@ from handlers.ask_question import (
     ask_question_callback,
 )
 from handlers.daily_verse_sender import send_daily_verse
-from db import save_user  # <-- import the save_user function
+import asyncio
 
 # ------------------ Init App ------------------
 app = Application.builder().token(BOT_TOKEN).build()
 
-# ------------------ Wrap start handler to save user ------------------
-async def start_and_save(update, context):
-    user = update.effective_user
-    save_user(user)  # Save user to DB (sync is fine)
-    await start(update, context)  # Await the original async start handler
-
 # ------------------ Message Handlers ------------------
-app.add_handler(CommandHandler("start", start_and_save))  # updated wrapper
+app.add_handler(CommandHandler("start", start))
 app.add_handler(MessageHandler(filters.Regex("^📖 Read Bible$"), read_bible_handler))
 app.add_handler(MessageHandler(filters.Regex("^❓ Ask a Question$"), ask_question_start))
 app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), ask_question_handler))
 
 # ------------------ Callback Handlers ------------------
-app.add_handler(
-    CallbackQueryHandler(callback_dispatcher, pattern="^(version_|book_|chapter_|back_).*")
-)
-app.add_handler(
-    CallbackQueryHandler(ask_question_callback, pattern="^ask_.*")
-)
+app.add_handler(CallbackQueryHandler(callback_dispatcher,
+                                     pattern="^(version_|book_|chapter_|back_).*"))
+app.add_handler(CallbackQueryHandler(ask_question_callback,
+                                     pattern="^ask_.*"))
 
 # ------------------ Job Queue ------------------
 job_queue = app.job_queue
